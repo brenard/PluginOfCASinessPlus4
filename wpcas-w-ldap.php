@@ -221,7 +221,7 @@ function get_ldap_user($uid) {
 	if(!$ds) {
 		$error = 'Error in contacting the LDAP server.';
 	} else {	
-		echo "<h2>Connected</h2>";
+		//echo "<h2>Connected</h2>";
 		//exit;
 		// Make sure the protocol is set to version 3
 		if(!ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3)) {
