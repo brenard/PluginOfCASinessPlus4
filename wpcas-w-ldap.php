@@ -265,17 +265,29 @@ class wpcasldapuser
 		global $wpcasldap_use_options;
 		if (isset($this->data[0]['uid'][0]))
 			return array(
-				'user_login' => $this->data[0]['uid'][0],
+				'user_login' => $this->get_attr($wpcasldap_use_options['ldap_map_login_attr']),
 				'user_password' => substr( md5( uniqid( microtime( ))), 0, 8 ),
-				'user_email' => $this->data[0]['mail'][0],
-				'first_name' => $this->data[0]['givenname'][0],
-				'last_name' => $this->data[0]['sn'][0],
-				'role' => $wpcasldap_use_options['userrole'],
-				'nickname' => $this->data[0]['cn'][0],
-				'user_nicename' => $this->data[0]['uid'][0]
+				'user_email' => $this->get_attr($wpcasldap_use_options['ldap_map_email_attr'],$wpcasldap_use_options['ldap_map_alt_email_attr']),
+				'first_name' => $this->get_attr($wpcasldap_use_options['ldap_map_first_name_attr']),
+				'last_name' => $this->get_attr($wpcasldap_use_options['ldap_map_last_name_attr']),
+				'role' => $this->get_attr($wpcasldap_use_options['ldap_map_role_attr'],$wpcasldap_use_options['userrole']),
+				'nickname' => $this->get_attr($wpcasldap_use_options['ldap_map_nickname_attr']),
+				'user_nicename' => $this->get_attr($wpcasldap_use_options['ldap_map_nicename_attr'])
 			);
 		else 
 			return false;
+	}
+
+	function get_attr($attr,$alt_attr=Null) {
+		if(isset($this->data[0][$attr][0])) {
+			return $this->data[0][$attr][0];
+		}
+		elseif($alt_attr != Null && isset($this->data[0][$alt_attr][0])) {
+			return $this->data[0][$alt_attr][0];
+		}
+		else {
+			return Null;
+		}
 	}
 	
 }
@@ -288,7 +300,7 @@ class wpcasldapuser
 function wpcasldap_register_settings() {
 	global $wpcasldap_options;
 	
-	$options = array('email_suffix', 'cas_version', 'include_path', 'server_hostname', 'server_port', 'server_path', 'useradd', 'userrole', 'ldaphost', 'ldapport', 'ldapbasedn', 'useldap');
+	$options = array('email_suffix', 'cas_version', 'include_path', 'server_hostname', 'server_port', 'server_path', 'useradd', 'userrole', 'ldaphost', 'ldapport', 'ldapbasedn', 'useldap', 'ldap_map_login_attr', 'ldap_map_first_name_attr', 'ldap_map_last_name_attr', 'ldap_map_role_attr', 'ldap_map_nicename_attr', 'ldap_map_nickname_attr', 'ldap_map_email_attr', 'ldap_map_alt_email_attr');
 
 	foreach ($options as $o) {
 		if (!isset($wpcasldap_options[$o])) {
@@ -362,7 +374,15 @@ function wpcasldap_getoptions() {
 			'ldaphost' => get_option('wpcasldap_ldaphost'),
 			'ldapport' => get_option('wpcasldap_ldapport'),
 			'useldap' => get_option('wpcasldap_useldap'),
-			'ldapbasedn' => get_option('wpcasldap_ldapbasedn')			
+			'ldapbasedn' => get_option('wpcasldap_ldapbasedn'),
+			'ldap_map_login_attr' => get_option('wpcasldap_ldap_map_login_attr','uid'),
+			'ldap_map_first_name_attr' => get_option('wpcasldap_ldap_map_first_name_attr','givenname'),
+			'ldap_map_last_name_attr' => get_option('wpcasldap_ldap_map_last_name_attr','sn'),
+			'ldap_map_role_attr' => get_option('wpcasldap_ldap_map_role_attr','userrole'),
+			'ldap_map_nicename_attr' => get_option('wpcasldap_ldap_map_nicename_attr','uid'),
+			'ldap_map_nickname_attr' => get_option('wpcasldap_ldap_map_nickname_attr','cn'),
+			'ldap_map_email_attr' => get_option('wpcasldap_ldap_map_email_attr','mail'),
+			'ldap_map_alt_email_attr' => get_option('wpcasldap_ldap_map_alt_email_attr','supannMailPerso'),
 		);
 	
 	if (is_array($wpcasldap_options) && count($wpcasldap_options) > 0)
@@ -535,6 +555,28 @@ function wpcasldap_options_page() {
 			</td>
 		</tr>
         <?php endif; ?>
+
+	<?php
+		$map_attrs=array(
+			'login' => 'login',
+			'first_name' => 'first name',
+			'last_name' => 'last name',
+			'nickname' => 'nickname',
+			'nicename' => 'nice name',
+			'role' => 'role',
+			'email' => 'email',
+			'alt_email' => 'alternative email',
+		);
+		foreach($map_attrs as $key => $label) {
+			if (!isset($wpcasldap_options['ldap_map_'.$key.'_attr'])) : ?>
+		<tr valign="center">
+			<th width="300px" scope="row">LDAP map <?php echo $label; ?> attribute</th>
+			<td><input type="text" name="wpcasldap_ldap_map_<?php echo $key; ?>_attr" id="ldap_map_<?php echo $key; ?>_attr" value="<?php echo $optionarray_def['ldap_map_'.$key.'_attr']; ?>" size="35" />
+			</td>
+		</tr>
+        <?php endif;
+		}?>
+
 	</table>
     </blockquote></blockquote>
     <?php endif; ?>
