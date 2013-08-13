@@ -105,6 +105,12 @@ class wpCASLDAP {
 		if( phpCAS::isAuthenticated() ){
 			// CAS was successful
 			if ( $user = get_user_by( 'login',phpCAS::getUser() )){ // user already exists
+				if ($wpcasldap_use_options['ldap_update_userinfos_each_connection'] == 'yes') {
+					$ldapuser = get_ldap_user(phpCAS::getUser());
+					$ldapuserdata=$ldapuser->get_user_data();
+					$ldapuserdata['ID']=$user->ID;
+					wp_update_user($ldapuserdata);
+				}
 				$udata = get_userdata($user->ID);
 				
 				$userExists = is_user_member_of_blog( $user->ID, $blog_id);
@@ -300,7 +306,7 @@ class wpcasldapuser
 function wpcasldap_register_settings() {
 	global $wpcasldap_options;
 	
-	$options = array('email_suffix', 'cas_version', 'include_path', 'server_hostname', 'server_port', 'server_path', 'useradd', 'userrole', 'ldaphost', 'ldapport', 'ldapbasedn', 'useldap', 'ldap_map_login_attr', 'ldap_map_first_name_attr', 'ldap_map_last_name_attr', 'ldap_map_role_attr', 'ldap_map_nicename_attr', 'ldap_map_nickname_attr', 'ldap_map_email_attr', 'ldap_map_alt_email_attr');
+	$options = array('email_suffix', 'cas_version', 'include_path', 'server_hostname', 'server_port', 'server_path', 'useradd', 'userrole', 'ldaphost', 'ldapport', 'ldapbasedn', 'useldap', 'ldap_update_userinfos_each_connection', 'ldap_map_login_attr', 'ldap_map_first_name_attr', 'ldap_map_last_name_attr', 'ldap_map_role_attr', 'ldap_map_nicename_attr', 'ldap_map_nickname_attr', 'ldap_map_email_attr', 'ldap_map_alt_email_attr');
 
 	foreach ($options as $o) {
 		if (!isset($wpcasldap_options[$o])) {
@@ -310,6 +316,7 @@ function wpcasldap_register_settings() {
 					break;
 				case 'useradd':
 				case 'useldap':
+				case 'ldap_update_userinfos_each_connection':
 					$cleaner = 'wpcasldap_yesorno';
 					break;
 				case 'email_suffix':
@@ -375,6 +382,7 @@ function wpcasldap_getoptions() {
 			'ldapport' => get_option('wpcasldap_ldapport',389),
 			'useldap' => get_option('wpcasldap_useldap'),
 			'ldapbasedn' => get_option('wpcasldap_ldapbasedn'),
+			'ldap_update_userinfos_each_connection' => get_option('wpcasldap_ldap_update_userinfos_each_connection','no'),
 			'ldap_map_login_attr' => get_option('wpcasldap_ldap_map_login_attr','uid'),
 			'ldap_map_first_name_attr' => get_option('wpcasldap_ldap_map_first_name_attr','givenname'),
 			'ldap_map_last_name_attr' => get_option('wpcasldap_ldap_map_last_name_attr','sn'),
@@ -555,6 +563,16 @@ function wpcasldap_options_page() {
 			</td>
 		</tr>
         <?php endif; ?>
+	 <?php if (!isset($wpcasldap_options['ldap_update_userinfos_each_connection'])) : ?>
+		<tr valign="center">
+			<th width="300px" scope="row">Update LDAP user infos on each connection</th>
+			<td><input type="radio" name="wpcasldap_ldap_update_userinfos_each_connection" id="ldap_update_userinfos_each_connection_yes" value="yes"
+		<?php echo ($optionarray_def['ldap_update_userinfos_each_connection'] == 'yes')?'checked="checked"':''; ?> />Yes |
+		<input type="radio" name="wpcasldap_ldap_update_userinfos_each_connection" id="ldap_update_userinfos_each_connection_no" value="no"
+		<?php echo ($optionarray_def['ldap_update_userinfos_each_connection'] != 'yes')?'checked="checked"':''; ?> />No
+			</td>
+		</tr>
+	<?php endif; ?>
 
 	<?php
 		$map_attrs=array(
