@@ -187,12 +187,14 @@ function wpcasldap_nowpuser($newuserid) {
 		//echo "<pre>";print_r($newuser);echo "</pre>";
 		
 		$userdata = $newuser->get_user_data();
+		$userdata['show_admin_bar_front']=($wpcasldap_use_options['show_admin_bar_front']=='yes'?'true':'false');
 	} else {
 		$userdata = array(
 				'user_login' => $newuserid,
 				'user_password' => substr( md5( uniqid( microtime( ))), 0, 8 ),
 				'user_email' => $newuserid.'@'.$wpcasldap_use_options['email_suffix'],
 				'role' => $wpcasldap_use_options['userrole'],
+				'show_admin_bar_front' => ($wpcasldap_use_options['show_admin_bar_front']=='yes'?'true':'false')
 			);
 	}
 	if (!function_exists('wp_insert_user'))
@@ -306,7 +308,7 @@ class wpcasldapuser
 function wpcasldap_register_settings() {
 	global $wpcasldap_options;
 	
-	$options = array('email_suffix', 'cas_version', 'include_path', 'server_hostname', 'server_port', 'server_path', 'useradd', 'userrole', 'ldaphost', 'ldapport', 'ldapbasedn', 'useldap', 'ldap_update_userinfos_each_connection', 'ldap_map_login_attr', 'ldap_map_first_name_attr', 'ldap_map_last_name_attr', 'ldap_map_role_attr', 'ldap_map_nicename_attr', 'ldap_map_nickname_attr', 'ldap_map_email_attr', 'ldap_map_alt_email_attr');
+	$options = array('email_suffix', 'cas_version', 'include_path', 'server_hostname', 'server_port', 'server_path', 'useradd', 'userrole', 'show_admin_bar_front', 'ldaphost', 'ldapport', 'ldapbasedn', 'useldap', 'ldap_update_userinfos_each_connection', 'ldap_map_login_attr', 'ldap_map_first_name_attr', 'ldap_map_last_name_attr', 'ldap_map_role_attr', 'ldap_map_nicename_attr', 'ldap_map_nickname_attr', 'ldap_map_email_attr', 'ldap_map_alt_email_attr');
 
 	foreach ($options as $o) {
 		if (!isset($wpcasldap_options[$o])) {
@@ -315,6 +317,7 @@ function wpcasldap_register_settings() {
 					$cleaner = 'wpcasldap_oneortwo';
 					break;
 				case 'useradd':
+				case 'show_admin_bar_front':
 				case 'useldap':
 				case 'ldap_update_userinfos_each_connection':
 					$cleaner = 'wpcasldap_yesorno';
@@ -378,6 +381,7 @@ function wpcasldap_getoptions() {
 			'server_path' => get_option('wpcasldap_server_path','cas/'),
 			'useradd' => get_option('wpcasldap_useradd'),
 			'userrole' => get_option('wpcasldap_userrole'),
+			'show_admin_bar_front' => get_option('wpcasldap_show_admin_bar_front','yes'),
 			'ldaphost' => get_option('wpcasldap_ldaphost'),
 			'ldapport' => get_option('wpcasldap_ldapport',389),
 			'useldap' => get_option('wpcasldap_useldap'),
@@ -493,6 +497,17 @@ function wpcasldap_options_page() {
 			</td>
 		</tr>
         <?php endif; ?>
+	    <?php if (!isset($wpcasldap_options['show_admin_bar_front'])) : ?>
+		<tr valign="center">
+			<th width="300px" scope="row"><?php _e( 'Show WP toolbar on front-end by default', 'wpcasldap' ) ?></th>
+			<td><input type="radio" name="wpcasldap_show_admin_bar_front" id="show_admin_bar_front_yes" value="yes"
+			<?php echo ($optionarray_def['show_admin_bar_front'] == 'yes')?'checked="checked"':''; ?> />Yes |
+			<input type="radio" name="wpcasldap_show_admin_bar_front" id="show_admin_bar_front_no" value="no"
+			<?php echo ($optionarray_def['show_admin_bar_front'] != 'yes')?'checked="checked"':''; ?> />No
+			</td>
+		</tr>
+        <?php endif; ?>
+
 	    <?php if (!isset($wpcasldap_options['userrole'])) : ?>
 		<tr valign="center"> 
 			<th width="300px" scope="row"><?php _e( 'Default Role', 'wpcasldap' ) ?></th> 
