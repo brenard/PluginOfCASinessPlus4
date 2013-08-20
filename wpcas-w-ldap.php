@@ -433,7 +433,7 @@ function wpcasldap_options_page() {
 			<td colspan="2"><?php _e( 'Full absolute path to CAS.php script', 'wpcasldap' ) ?></td>
 		</tr>
 		<tr valign="center"> 
-			<th width="300px" scope="row"><?php _e( 'CAS.php path', 'wpcasldap' ) ?></th> 
+			<th width="300px" scope="row"><?php _e( 'CAS.php path', 'wpcasldap' ) ?></th>
 			<td><input type="text" name="wpcasldap_include_path" id="include_path_inp" value="<?php echo $optionarray_def['include_path']; ?>" size="35" /></td>
 		</tr>
 	</table>
@@ -449,7 +449,7 @@ function wpcasldap_options_page() {
 	<table width="500px" cellspacing="2" cellpadding="5" class="editform">
 	    <?php if (!isset($wpcasldap_options['cas_version'])) : ?>
 		<tr valign="center"> 
-			<th width="300px" scope="row">CAS verions</th> 
+			<th width="300px" scope="row"><?php _e( 'CAS versions', 'wpcasldap' ) ?></th>
 			<td><select name="wpcasldap_cas_version" id="cas_version_inp">
                     <option value="2.0" <?php echo ($optionarray_def['cas_version'] == '2.0')?'selected':''; ?>>CAS_VERSION_2_0</option>
                     <option value="1.0" <?php echo ($optionarray_def['cas_version'] == '1.0')?'selected':''; ?>>CAS_VERSION_1_0</option>
@@ -459,19 +459,19 @@ function wpcasldap_options_page() {
         <?php endif; ?>
 	    <?php if (!isset($wpcasldap_options['server_hostname'])) : ?>
 		<tr valign="center"> 
-			<th width="300px" scope="row"><?php _e( 'server hostname', 'wpcasldap' ) ?></th> 
+			<th width="300px" scope="row"><?php _e( 'Server hostname', 'wpcasldap' ) ?></th>
 			<td><input type="text" name="wpcasldap_server_hostname" id="server_hostname_inp" value="<?php echo $optionarray_def['server_hostname']; ?>" size="35" /></td>
 		</tr>
         <?php endif; ?>
 	    <?php if (!isset($wpcasldap_options['server_port'])) : ?>
 		<tr valign="center"> 
-			<th width="300px" scope="row"><?php _e( 'server port', 'wpcasldap' ) ?></th> 
+			<th width="300px" scope="row"><?php _e( 'Server port', 'wpcasldap' ) ?></th>
 			<td><input type="text" name="wpcasldap_server_port" id="server_port_inp" value="<?php echo $optionarray_def['server_port']; ?>" size="35" /></td>
 		</tr>
         <?php endif; ?>
 	    <?php if (!isset($wpcasldap_options['server_path'])) : ?>
 		<tr valign="center"> 
-			<th width="300px" scope="row"><?php _e( 'server path', 'wpcasldap' ) ?></th> 
+			<th width="300px" scope="row"><?php _e( 'Server path', 'wpcasldap' ) ?></th>
 			<td><input type="text" name="wpcasldap_server_path" id="server_path_inp" value="<?php echo $optionarray_def['server_path']; ?>" size="35" /></td>
 		</tr>
         <?php endif; ?>
@@ -489,7 +489,7 @@ function wpcasldap_options_page() {
 	<table width="500px" cellspacing="2" cellpadding="5" class="editform">
 	    <?php if (!isset($wpcasldap_options['useradd'])) : ?>
 		<tr valign="center"> 
-			<th width="300px" scope="row">Add to Database</th> 
+			<th width="300px" scope="row"><?php _e( 'Add to Database', 'wpcasldap' ) ?></th>
 			<td><input type="radio" name="wpcasldap_useradd" id="useradd_yes" value="yes" 
             		<?php echo ($optionarray_def['useradd'] == 'yes')?'checked="checked"':''; ?> />Yes |
             	<input type="radio" name="wpcasldap_useradd" id="useradd_no" value="no" 
@@ -510,7 +510,7 @@ function wpcasldap_options_page() {
 
 	    <?php if (!isset($wpcasldap_options['userrole'])) : ?>
 		<tr valign="center"> 
-			<th width="300px" scope="row"><?php _e( 'Default Role', 'wpcasldap' ) ?></th> 
+			<th width="300px" scope="row"><?php _e( 'Default Role', 'wpcasldap' ) ?></th>
 			<td><select name="wpcasldap_userrole" id="cas_version_inp">
 				<option value="subscriber" <?php echo ($optionarray_def['userrole'] == 'subscriber')?'selected':''; ?>>Subscriber</option>
 				<option value="contributor" <?php echo ($optionarray_def['userrole'] == 'contributor')?'selected':''; ?>>Contributor</option>
@@ -524,7 +524,7 @@ function wpcasldap_options_page() {
 	    <?php if (!isset($wpcasldap_options['useldap'])) : ?>
 			<?php if (function_exists('ldap_connect')) : ?>
 			<tr valign="center"> 
-				<th width="300px" scope="row">Use LDAP to get user info</th> 
+				<th width="300px" scope="row"><?php _e( 'Use LDAP to get user info', 'wpcasldap' ) ?></th>
 				<td><input type="radio" name="wpcasldap_useldap" id="useldap_yes" value="yes" 
 						<?php echo ($optionarray_def['useldap'] == 'yes')?'checked="checked"':''; ?> />Yes |
 					<input type="radio" name="wpcasldap_useldap" id="useldap_no" value="no" 
@@ -541,7 +541,7 @@ function wpcasldap_options_page() {
         <?php endif; ?>
 	    <?php if (!isset($wpcasldap_options['email_suffix'])) : ?>
 		<tr valign="center"> 
-			<th width="300px" scope="row">E-mail Suffix</th> 
+			<th width="300px" scope="row"><?php _e( 'E-mail Suffix', 'wpcasldap' ) ?></th>
 			<td><input type="text" name="wpcasldap_email_suffix" id="server_port_inp" value="<?php echo $optionarray_def['email_suffix']; ?>" size="35" />
 			</td>
 		</tr>
@@ -559,28 +559,35 @@ function wpcasldap_options_page() {
 	<table width="500px" cellspacing="2" cellpadding="5" class="editform">
 	    <?php if (!isset($wpcasldap_options['ldaphost'])) : ?>
 		<tr valign="center"> 
-			<th width="300px" scope="row">LDAP Host</th> 
+			<th width="300px" scope="row"><?php _e( 'LDAP Host', 'wpcasldap' ) ?></th>
 			<td><input type="text" name="wpcasldap_ldaphost" id="ldap_host_inp" value="<?php echo $optionarray_def['ldaphost']; ?>" size="35" />
 			</td>
 		</tr>
         <?php endif; ?>
 	    <?php if (!isset($wpcasldap_options['ldapport'])) : ?>
 		<tr valign="center"> 
-			<th width="300px" scope="row">LDAP Port</th> 
+			<th width="300px" scope="row"><?php _e( 'LDAP Port', 'wpcasldap' ) ?></th>
 			<td><input type="text" name="wpcasldap_ldapport" id="ldap_port_inp" value="<?php echo $optionarray_def['ldapport']; ?>" size="35" />
 			</td>
 		</tr>
         <?php endif; ?>
 	    <?php if (!isset($wpcasldap_options['ldapbasedn'])) : ?>
 		<tr valign="center"> 
-			<th width="300px" scope="row">LDAP Base DN</th> 
+			<th width="300px" scope="row"><?php _e( 'LDAP Base DN', 'wpcasldap' ) ?></th>
 			<td><input type="text" name="wpcasldap_ldapbasedn" id="ldap_basedn_inp" value="<?php echo $optionarray_def['ldapbasedn']; ?>" size="35" />
 			</td>
 		</tr>
         <?php endif; ?>
+	</table>
+    </blockquote></blockquote>
+
+	<h4><?php _e( 'LDAP attributes mapping', 'wpcasldapldap' ) ?></h4>
+    <blockquote><blockquote>
+
+	<table width="500px" cellspacing="2" cellpadding="5" class="editform">
 	 <?php if (!isset($wpcasldap_options['ldap_update_userinfos_each_connection'])) : ?>
 		<tr valign="center">
-			<th width="300px" scope="row">Update LDAP user infos on each connection</th>
+			<th width="300px" scope="row"><?php _e( 'Update LDAP user infos on each connection', 'wpcasldap' ) ?></th>
 			<td><input type="radio" name="wpcasldap_ldap_update_userinfos_each_connection" id="ldap_update_userinfos_each_connection_yes" value="yes"
 		<?php echo ($optionarray_def['ldap_update_userinfos_each_connection'] == 'yes')?'checked="checked"':''; ?> />Yes |
 		<input type="radio" name="wpcasldap_ldap_update_userinfos_each_connection" id="ldap_update_userinfos_each_connection_no" value="no"
@@ -591,19 +598,19 @@ function wpcasldap_options_page() {
 
 	<?php
 		$map_attrs=array(
-			'login' => 'login',
-			'first_name' => 'first name',
-			'last_name' => 'last name',
-			'nickname' => 'nickname',
-			'nicename' => 'nice name',
-			'role' => 'role',
-			'email' => 'email',
-			'alt_email' => 'alternative email',
+			'login' => 'Login',
+			'first_name' => 'First name',
+			'last_name' => 'Last name',
+			'nickname' => 'Nickname',
+			'nicename' => 'Nice name',
+			'role' => 'Role',
+			'email' => 'Email',
+			'alt_email' => 'Alternative email',
 		);
 		foreach($map_attrs as $key => $label) {
 			if (!isset($wpcasldap_options['ldap_map_'.$key.'_attr'])) : ?>
 		<tr valign="center">
-			<th width="300px" scope="row">LDAP map <?php echo $label; ?> attribute</th>
+			<th width="300px" scope="row"><?php _e( $label.' attribute', 'wpcasldap') ?></th>
 			<td><input type="text" name="wpcasldap_ldap_map_<?php echo $key; ?>_attr" id="ldap_map_<?php echo $key; ?>_attr" value="<?php echo $optionarray_def['ldap_map_'.$key.'_attr']; ?>" size="35" />
 			</td>
 		</tr>
