@@ -44,7 +44,7 @@ Author URI: http://www.yessios.com/
 if (file_exists( dirname(__FILE__).'/wpcasldap-conf.php' ) ) 
 	include_once( dirname(__FILE__).'/wpcasldap-conf.php' ); // attempt to fetch the optional config file
 
-if (!is_array($wpcasldap_options))
+if (!isset($wpcasldap_options) || !is_array($wpcasldap_options))
 	$wpcasldap_optons = array();
 
 $wpcasldap_use_options = wpcasldap_getoptions();
@@ -96,7 +96,7 @@ class wpCASLDAP {
 	 If the user is not provisioned and wpcasldap_useradd is set to 'yes', wpcasldap_nowpuser() is called
 	*/
 	
-	function authenticate() {
+	static function authenticate() {
 		global $wpcasldap_use_options, $cas_configured, $blog_id;
 
 		if ( !$cas_configured )
@@ -149,7 +149,7 @@ class wpCASLDAP {
 	
 	
 	// hook CAS logout to WP logout
-	function logout() {
+	static function logout() {
 		global $cas_configured;
 
 		if (!$cas_configured)
@@ -160,7 +160,7 @@ class wpCASLDAP {
 	}
 
 	// hide password fields on user profile page.
-	function show_password_fields( $show_password_fields ) {
+	static function show_password_fields( $show_password_fields ) {
 		if( 'user-new.php' <> basename( $_SERVER['PHP_SELF'] ))
 			return false;
 
